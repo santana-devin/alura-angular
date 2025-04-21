@@ -22,5 +22,16 @@ export const livros: Livro[] = [
         },
         favorito: false,
         imagem: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wC...'
+      },
+      {
+        titulo: 'As ondas',
+        autoria: 'Virginia Woolf',
+        genero: {
+          id: 'misterio',
+          value: 'Romance',
+          livros: []
+        },
+        favorito: false,
+        imagem: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wC...'
       }
 ]
