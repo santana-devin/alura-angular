@@ -1,9 +1,9 @@
 @if(genero().livros.length != 0){
-<section class="genero">
+<section class="genero" [ngClass]="genero().id">
     <h3 class="texto-h3-preta">
         {{ genero().value }}
     </h3>
-    <span class="linha-destaque linha destaque--pequena"></span>
+    <span class="linha-destaque linha destaque--pequena" [ngClass]="genero().id"></span>
     <div class="livros-genero">
         @for (livro of genero().livros; track livro) {
             <app-livro [livro]="livro"></app-livro>

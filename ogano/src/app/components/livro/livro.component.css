@@ -10,8 +10,7 @@ section {
     position: relative;
     overflow: hidden;
     padding-top: 16px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin-left: 64px;
+    border-top: 24px solid;
   }
   
   section .info-livro {
@@ -69,10 +68,6 @@ section {
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
 
-  section {
-    /* código já existente omitido */
-    border-top: 24px solid; //código adicionado à section
-}
 
 .romance {
   border-color: #82CFFA;
