@@ -279,7 +279,6 @@ Este conteúdo foi útil para o seu aprendizado?
 
 # 06 **Fazendo o control flow com @for**
 
-
 Agora que já temos a lógica e a organização dos livros dentro dos seus respectivos gêneros, precisamos passar essa informação da lista de livros para o gênero literário.
 
 ## Declarando a propriedade de entrada
@@ -487,3 +486,199 @@ Copiar código
 ## Conclusão e próximos passos
 
 Com isso, conseguimos realizar a renderização utilizando a nova sintaxe *Control Flow* do Angular. A seguir, continuaremos evoluindo ainda mais o projeto Organo!
+
+# 07 **Preparando o ambiente: código CSS**
+
+No vídeo 4.3, vamos estilizar a imagem e o texto do componente de gênero literário. Para isso, vamos alterar o arquivo `genero-literario.component.css` adicionando o código a seguir:
+
+```css
+.sem-livros img {
+  width: 150px;
+  margin-top: 8px;
+  opacity: 0.8;
+}
+
+.texto-sem-livros {
+  text-align: center;
+  margin-top: 16px;
+  color: #3b3b3b;
+  font-size: 20px;
+}
+Copiar código
+```
+
+Quando esse código for citado em aula, fique à vontade para copiá-lo daqui e adicioná-lo ao seu projeto :)
+
+# 08 **Control flow com @if**
+
+Conseguimos renderizar os livros dentro dos gêneros literários, o que é muito interessante. No entanto, não sabemos o que acontece caso não haja nenhum livro em um determinado gênero.
+
+Para testar isso, no VS Code, acessaremos o `mock-livros.ts` e comentaremos os dois livros que temos no gênero de Mistério.
+
+> `mock-livros.ts`:
+
+```typescript hljs
+// {
+//   titulo: 'E não sobrou nenhum',
+//   autoria: 'Agatha Christie',
+//   imagem: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxETEhUTEhAWFRUWGBUYGBYXFxYVGhY…
+//   genero: {
+//     id: 'misterio',
+//     value: 'Mistério',
+//     livros: []
+//   },
+//   favorito: false
+// },
+
+// Código omitido
+
+// {
+//   titulo: 'O médico e o monstro',
+//   autoria: 'Robert Louis Stevenson',
+//   imagem: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgVFRYYGRgaGhocHBwcGh4cHB4…
+//   genero: {
+//     id: 'misterio',
+//     value: 'Mistério',
+//     livros: []
+//   },
+//   favorito: false
+// },
+Copiar código
+```
+
+Vamos verificar como isso se apresenta na aplicação. Ao voltar para o navegador, no gênero de Mistério, não há nada, resultando em um espaço vazio abaixo do título.
+
+## Lidando com a ausência de livros
+
+Pensando na experiência da pessoa usuária, seria mais adequado **fornecer alguma informação para esclarecer que esse gênero não possui livros** , evitando que a pessoa usuária pense que se trata de um erro.
+
+Afinal, se não houver nenhum livro, a pessoa pode achar que é um *bug* e sair da aplicação, quando apenas não há livros cadastrados ainda. Como podemos melhorar essa usabilidade?
+
+## Utilizando o `@if` para exibir uma mensagem
+
+Voltando ao VS Code, podemos utilizar outra estrutura do *Control Flow* do Angular. No *template* `genero-literario.component.html`, onde estamos renderizando os livros, já utilizamos o `@for`, e agora podemos usar uma estrutura para renderização condicional, o `@if`. Essa estrutura é semelhante ao `if` comum na programação, mas no Angular usamos a sintaxe diferente.
+
+Criaremos essa condicional acima da `div` que contém o `@for`. Entre parênteses, estabeleceremos que, se `genero.livros.length` for igual a zero, renderizaremos uma mensagem e uma imagem informando que ainda não há livros nesse gênero.
+
+Para imagem, criaremos uma `div` com a classe `texto-sem-livros` entre as chaves do `@if`. Dentro dessa `div`, colocaremos um `img`.
+
+> `genero-literario.component.html`:
+
+```html hljs language-xml
+@if(genero().livros.length === 0) {
+    <div class="texto-sem-livros">
+        <img >
+    </div>
+}
+Copiar código
+```
+
+Dentro da *tag* `img`, utilizaremos a seguinte imagem, com o nome `sem-livros.png`:
+
+![Três livros empilhados, cada um com diferentes cores de capa: o livro no topo é roxo, o do meio é branco com detalhes amarelos, e o de baixo é laranja. Na frente dos livros, há uma lupa azul inclinada para a direita.](https://cdn1.gnarususercontent.com.br/1/795715/d4289be0-2c2f-4c59-90d6-1442607ea054.png)> [Baixe a imagem `sem-livros.png`](https://github.com/nayannelbatista/4455-organo/blob/aula-4/public/sem-livros.png).
+
+Arrastaremos essa imagem a partir da janela do explorador do computador até a pasta "public", no explorador lateral do VS Code. No atributo `scr` da `img`, passaremos o caminho da imagem (`sem-livros.png`). No atributo `alt`, colocaremos o texto "Sem livros neste gênero":
+
+Abaixo da imagem, adicionaremos um parágrafo com a frase "Não há livros neste gênero ainda":
+
+```html hljs language-xml
+@if(genero().livros.length === 0) {
+    <div class="texto-sem-livros">
+        <img src="sem-livros.png" alt="Sem livros neste gênero">
+        <p>Não há livros neste gênero ainda</p>
+    </div>
+}
+Copiar código
+```
+
+## Ajustando o layout para uma melhor experiência
+
+Voltando na aplicação pelo navegador, temos a imagem e a mensagem aparecendo na categoria "Mistério". Falta apenas adicionar o CSS no gênero literário, mas já vimos como fazer isso.
+
+Utilizaremos o *Control Flow* do Angular. Assim como `@if` e `@for`, temos outras estruturas de controle para realizar essa renderização e interação de forma condicional.
+
+Acessando o `genero-literario.component.css`, vamos corrigi-lo. No final do arquivo, adicionaremos os seletores das novas classes: `sem-livros img` e `texto-sem-livros` para ajustar a imagem e o texto do parágrafo:
+
+> `genero-literario.component.css`:
+
+```css hljs
+.sem-livros img {
+    width: 150px;
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+.texto-sem-livros {
+    text-align: center;
+    margin-top: 16px;
+    color: #3b3b3b;
+    font-size: 20px;
+}
+Copiar código
+```
+
+Voltando na aplicação, temos a imagem e a mensagem centralizadas na página.
+
+## Revisando conceitos
+
+Vamos recapitular os conceitos que acabamos de aprender com uma analogia. No nosso contexto, **se** instalamos o Angular CLI no início do curso, pudemos criar o projeto e dar prosseguimento. Caso contrário, **se não** instalamos, não criamos o projeto.
+
+Essa estrutura condicional de "se" e "se não" está presente no Angular com o **`@if`** . O `@if` faz parte do *Control Flow* , a nova sintaxe de *template* do Angular. Anteriormente, em alguns projetos, utilizávamos o asterisco `*ngIf`. Agora, a nova abordagem é o `@if`.
+
+Usando outra analogia, imagine que chegamos em uma reunião e o local está vazio, sem nenhum aviso. É provável que saiamos da sala, e isso também aconteceria com uma pessoa usuária em uma aplicação que não carrega e não exibe nenhum aviso.
+
+Além do `@if`, conhecemos o **`@for`** , que serve para mostrar vários elementos com a mesma estrutura básica, como fizemos com os *cards* de livros, postagens em redes sociais e diversos outros casos.
+
+## Conclusão e próximos passos
+
+Estamos prestes a finalizar nossa aplicação. Faltam alguns detalhes do layout, que finalizaremos a seguir.
+
+# 09 **Melhorando a usabilidade na plataforma Zoop**
+
+
+A Zoop, uma plataforma de e-commerce, está sempre buscando melhorar a experiência de seus usuários. Recentemente, a equipe de desenvolvimento, da qual você faz parte, identificou que quando um vendedor não possui produtos cadastrados em uma determinada categoria, a página exibe apenas um espaço vazio. Isso tem gerado confusão entre os usuários, que muitas vezes acreditam que se trata de um erro no sistema.
+
+Como você poderia melhorar a usabilidade da plataforma, utilizando recursos do Angular, para garantir que os usuários entendam que a ausência de produtos é intencional e não um bug?
+
+
+[ ]Deixar a página como está, mas adicionar um botão de feedback para que os usuários possam relatar o problema de ausência de produtos, e incluir uma seção de perguntas frequentes que explique por que uma categoria pode não ter produtos listados, oferecendo também um formulário de contato para suporte adicional.
+
+[X]Implementar uma renderização condicional utilizando uma estrutura de controle como o @if do Angular para verificar se a lista de produtos está vazia e, nesse caso, exibir uma mensagem informativa e uma imagem indicando que não há produtos disponíveis na categoria.
+
+Correta, pois essa abordagem utiliza a renderização condicional para informar claramente aos usuários que a ausência de produtos é intencional, melhorando a usabilidade e evitando confusões.
+
+
+[ ]Criar uma lista de produtos fictícios para preencher a categoria, garantindo que a página nunca fique vazia, e adicionar uma nota explicativa que informe que os produtos são apenas exemplos e que os vendedores podem adicionar seus próprios produtos a qualquer momento.
+
+
+[ ]Adicionar um alerta pop-up que aparece sempre que uma categoria sem produtos é acessada, informando que não há produtos disponíveis no momento, e incluir uma breve explicação sobre como os vendedores podem adicionar novos produtos à categoria, além de oferecer um link para o guia de ajuda da plataforma.
+
+
+# 10 **Faça como eu fiz: renderize livros por gênero com @for e @if**
+
+Nesta aula, aprendemos como organizar e exibir livros por gênero literário utilizando estruturas de controle no Angular, como @for para iterar sobre a lista e @if para exibir mensagens quando não houver livros em um gênero específico.
+
+Agora é sua vez de praticar! Siga o passo a passo:
+
+* Agrupe os livros por gênero utilizando um Map;
+* Utilize o @for para iterar sobre os gêneros e exibir seus livros dinamicamente;
+* Implemente o @if para exibir uma mensagem quando um gênero não tiver livros;
+* Estilize a exibição dos gêneros e livros.
+
+Abaixo está o passo a passo detalhado de como você pode realizar a atividade!
+
+
+
+# 11 **O que aprendemos?**
+
+
+Nesta aula, aprendemos:
+
+* Utilizar a estrutura de dados Map em JavaScript para armazenar pares de chave e valor.
+* Utilizar o hook OnInit no Angular para inicializar lógica antes da renderização de um componente.
+* Implementar lógica de iteração sobre coleções de dados com o método forEach.
+* Usar operadores de encadeamento opcional e coalescência nula para manipulação segura de dados.
+* Transferir dados de um componente pai para filho no Angular por meio de input properties.
+* Iterar sobre listas no Angular usando a diretiva `@for` e a necessidade do `track`.
+* Implementar a renderização condicional usando `@if` no Angular.
+* Aplicar CSS para estilizar componentes e ajustar a apresentação de elementos.

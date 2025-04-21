@@ -68,3 +68,28 @@ section {
     transform: scale(1.1);
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
+
+  section {
+    /* código já existente omitido */
+    border-top: 24px solid; //código adicionado à section
+}
+
+.romance {
+  border-color: #82CFFA;
+}
+
+.misterio {
+  border-color: #A6D157;
+}
+
+.fantasia {
+  border-color: #E06B69;
+}
+
+.ficcao-cientifica {
+  border-color: #DB6EBF;
+}
+
+.tecnicos {
+  border-color: #FF8A29;
+}
