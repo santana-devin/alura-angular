@@ -1,7 +1,5 @@
 # 01 **Apresentação**
 
-
-
 Olá! Boas-vindas ao curso de Angular! Meu nome é Antônio Evaldo e serei o instrutor ao longo desta jornada em mais um projeto.
 
 > **Audiodescrição:** Antônio se descreve como um homem branco, com cabelos escuros, cacheados, volumosos e na altura dos ombros. Utiliza óculos com armação arredondada na cor preta, tem bigode e cavanhaque, olhos castanhos escuros, e está vestindo uma camisa azul escura da Alura. Ao fundo, uma parede com pôsteres decorativos iluminada por tons de azul e rosa.
@@ -31,10 +29,7 @@ Para acompanhar o curso, é essencial ter familiaridade com **HTML, CSS, TypeScr
 
 Prontos para embarcar nessa jornada incrível? Nos vemos no próximo vídeo!
 
-
-
 # 02 **Preparando o ambiente**
-
 
 # Olá, dev!
 
@@ -52,14 +47,14 @@ Para conferir se você já possui a CLI do Angular instalada e a sua versão, vo
 
 ```bash hljs
 ng version
-Copiar código
+
 ```
 
 O terminal deve responder com as versões instaladas no seu computador. Se a resposta for que o terminal não reconhece o comando, você pode instalar a Angular CLI na versão 19.1.5 com o seguinte comando:
 
 ```bash hljs
 npm install -g @angular/cli@19.1.5
-Copiar código
+
 ```
 
 A instalação deve ser feita e você deverá ser capaz de criar um novo projeto com a Angular CLI.
@@ -74,10 +69,7 @@ Durante o curso, trabalharemos com um design pronto que será transformado em c�
 
 Agora você está com o terreno preparado para me acompanhar no curso! Vamos lá?
 
-
-
 # 03 **Criando projeto Angular**
-
 
 Recebemos a tarefa de codificar o projeto Anybank, que já foi apresentado anteriormente. Este projeto está disponível em um design no Figma, e após várias discussões, decidimos utilizar o *framework* Angular para construir essa aplicação bancária.
 
@@ -89,7 +81,7 @@ Verificamos se a CLI do Angular está instalada globalmente no computador execut
 
 ```undefined
 ng version
-Copiar código
+
 ```
 
 No nosso caso, aparece a versão 19.0.7, que é a que utilizaremos neste curso, sendo uma das versões mais recentes no momento da gravação.
@@ -104,7 +96,7 @@ Outra *flag* que passamos é `--skip-tests`, que serve para pular os testes, poi
 
 ```css
 ng new anybank --no-routing --skip-tests
-Copiar código
+
 ```
 
 Após executar o comando, o terminal faz algumas perguntas para personalizar ainda mais a criação do projeto. A primeira pergunta é sobre a estilização, e selecionamos CSS pressionando "Enter". A próxima pergunta é sobre a utilização de SSR, e selecionamos a opção padrão, que é não utilizar SSR, um assunto mais avançado que será estudado posteriormente.
@@ -119,7 +111,7 @@ Para verificar se a aplicação está funcionando, abrimos o terminal integrado 
 
 ```sql
 npm start
-Copiar código
+
 ```
 
 Enquanto o comando é executado, relembramos como ele funciona. No arquivo `package.json`, localizado na raiz do projeto, estão guardados alguns scripts que podem ser executados pelo NPM.
@@ -142,7 +134,7 @@ Voltando ao VS Code, fecharemos o terminal integrado e o `package.json`, e abrir
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-Copiar código
+
 ```
 
 Após copiar da nossa referência, colamos no final da tag `<head>`, antes de seu fechamento:
@@ -165,7 +157,6 @@ Após copiar da nossa referência, colamos no final da tag `<head>`, antes de se
   <app-root></app-root>
 </body>
 </html>
-Copiar código
 ```
 
 Esse link trará as fontes do Google que utilizaremos. Feito isso, salvamos o arquivo.
@@ -222,7 +213,7 @@ ul,
 li {
   list-style: none;
 }
-Copiar código
+
 ```
 
 Após colar o código, formatamos com "Alt + Shift F". Ele contém um reset CSS e algumas variáveis que utilizaremos neste projeto específico. Podemos explorar esse código CSS com mais calma, lembrando que o foco deste curso não é CSS, então não explicaremos linha a linha. Feito isso, salvamos o arquivo.
@@ -233,7 +224,7 @@ Por fim, voltamos para a pasta `src`, entramos na pasta `app` e abrimos o arquiv
 
 ```css
 <h1>Olá, Evaldo! :)</h1>
-Copiar código
+
 ```
 
 Ao voltar para o navegador, percebemos que conseguimos remover todo o projeto esqueleto que veio por padrão. O reset CSS foi aplicado com sucesso, removendo alguns espaçamentos originais. O texto "**Olá, Evaldo! :)** " está levemente arredondado, utilizando a fonte *Montserrat* , especificada no `styles.css` e vinda das tags link que colocamos no HTML.
@@ -242,30 +233,21 @@ Ao voltar para o navegador, percebemos que conseguimos remover todo o projeto es
 
 Essa é a preparação que queríamos fazer para o nosso projeto Anybank. Agora estamos prontos para dar vida a ele, criando nosso primeiro componente. Nos encontramos na próxima etapa!
 
-
-
 # 04 **Personalizando um projeto inicial**
-
 
 Sua equipe recebeu a missão de desenvolver a Playcatch, uma nova plataforma de streaming de música, e escolheu o Angular como framework para a interface web. Durante a criação do projeto, a equipe decidiu personalizar algumas configurações iniciais para garantir que a estrutura do código atenda melhor às necessidades do desenvolvimento. No entanto, alguns membros do time ficaram em dúvida sobre quais aspectos podem ser configurados já no momento da criação do projeto, sem a necessidade de ajustes manuais posteriores.
 
 Quais personalizações podem ser feitas diretamente ao criar um novo projeto por meio da CLI do Angular, sem precisar de configurações manuais posteriores?
 
-
 [ ]A pessoa desenvolvedora pode escolher desde a interface visual da aplicação até a arquitetura de banco de dados diretamente.
-
 
 [ ]A única opção possível no momento da criação é escolher um nome para o projeto, sendo necessário ajustar outras configurações posteriormente.
 
-
 [ ]A linha de comando do Angular permite que você escolha se a aplicação que você deseja criar vai ter navegação entre páginas, mas não é possível impedir a criação de testes.
-
 
 [X]A escolha de opções como a remoção do roteamento de páginas padrão e a possibilidade de pular a criação de testes.
 
 Correto, pois através do uso de flags (opções) é possível remover o roteamento de páginas padrão com a flag `--no-routing` e escolher se o projeto vai realizar testes nos componentes com a flag `--skip-tests`.
-
-
 
 # 05 **Para saber mais: sintaxe e documentação da CLI**
 
@@ -283,7 +265,7 @@ E como é dito na [página de introdução da CLI](https://angular.dev/tools/cli
 ng new --routing=true
 # ou:
 ng new --routing
-Copiar código
+
 ```
 
 Mas como a configuração de roteamento já é habilitada por padrão na versão 19, podemos escrever uma das seguintes formas para desabilitar o roteamento (como fizemos em vídeo):
@@ -297,9 +279,7 @@ Copiar código
 
 Saber esses detalhes nos ajudam a dominar cada vez mais as ferramentas que utilizamos. E para continuar aprendendo continuamente, você pode usar a documentação como sua aliada!
 
-
 # 06 **Criando componente Banner**
-
 
 Nós criamos um novo projeto Angular do zero, utilizando a CLI do Angular!
 
@@ -321,7 +301,6 @@ Primeiro, vamos criar a estrutura básica do HTML:
     banner...
   </div>
 </div>
-Copiar código
 ```
 
 ## Aplicando Estilizações no CSS
@@ -344,7 +323,6 @@ No explorador do VS Code, abriremos o arquivo CSS do `app.component` e colaremos
   flex-direction: column;
   gap: 1.5rem;
 }
-Copiar código
 ```
 
 Após salvar o arquivo, ao voltar ao navegador e abrir a aplicação Anybank, o banner já estará um pouco mais centralizado, com algumas estilizações que serão a base de todo o nosso projeto.
@@ -357,7 +335,7 @@ Em um novo terminal integrado, que abrimos com "Ctrl + Shift + '", digitamos o c
 
 ```bash hljs
 ng g c banner
-Copiar código
+
 ```
 
 Com os arquivos gerados, podemos fechar o terminal integrado, apenas colapsando-o. No explorador de arquivos, uma nova pasta `banner` foi criada dentro da pasta `app`. Dentro dessa pasta, três novos arquivos foram criados: `banner.component.css`, `banner.component.html` e `banner.component.ts`.
@@ -372,7 +350,7 @@ Vamos voltar para o `html` do nosso app, fechar o explorador e, no lugar do text
     <app-banner />
   </div>
 </div>
-Copiar código
+
 ```
 
 Em seguida, abrimos o arquivo `app.component.ts`. Nele, o VS Code importou automaticamente o componente, pois aceitamos a sugestão no `html`. Na seção de importações, ele adicionou `import { BannerComponent } from "./banner/banner.component"`, e também incluiu o `BannerComponent` no array de importações.
@@ -392,7 +370,6 @@ import { BannerComponent } from "./banner/banner.component";
 export class AppComponent {
   title = 'anybank';
 }
-Copiar código
 ```
 
 Isso demonstra uma produtividade eficiente, pois não precisamos fazer isso manualmente. É necessário salvar o arquivo `app.component.ts`, pois ele não é salvo automaticamente.
@@ -413,7 +390,7 @@ Dentro dessa tag, escrevemos uma `section` com a classe `boas-vindas`. Dentro da
     <h1 class="titulo">Olá, Evaldo! :)</h1>
   </section>
 </header>
-Copiar código
+
 ```
 
 Ao verificar no navegador, os textos "**Quinta-feira, 08/09/2022** " e "**Olá, Evaldo! :)** " aparecem, mas a estilização ainda não está adequada.
@@ -469,7 +446,7 @@ Consultamos os estilos `css` e abrimos o arquivo `banner.component.css` para col
     width: 70%;
   }
 }
-Copiar código
+
 ```
 
 Após colá-los, salvamos o arquivo. Voltando ao navegador, a aplicação já está visualmente agradável. O banner possui um gradiente azul no fundo e os espaçamentos estão ajustados.
@@ -478,33 +455,24 @@ Após colá-los, salvamos o arquivo. Voltando ao navegador, a aplicação já es
 
 Concluímos nosso primeiro componente do banner, mas ainda há trabalho a ser feito, como dinamizar a data. Nos encontramos no próximo vídeo!
 
-
-
 # 07 **Aplicando componentes ao projeto**
-
 
 A empresa Jornada Milhas está desenvolvendo uma nova interface para a reserva de passagens, e a equipe de desenvolvimento percebeu que o código da página principal está ficando muito extenso e difícil de manter. Durante uma reunião, surgiu a discussão sobre a importância de separar partes do código em componentes.
 
 Por que é recomendável separar o código da interface em componentes ao desenvolver uma aplicação em Angular?
 
-
 [ ]Para evitar que o código seja interpretado pelo navegador de forma incorreta, prevenindo erros de sintaxe.
 
-
 [ ]Para garantir que cada componente seja carregado individualmente, evitando qualquer impacto no desempenho da aplicação.
-
 
 [X]Para facilitar a reutilização de código e melhorar a organização do projeto, tornando a manutenção mais simples.
 
 Correta, pois a separação do código em componentes promove a reutilização, melhora a organização e facilita a manutenção, tornando o desenvolvimento mais eficiente e escalável.
 
-
 [ ]Para impedir que diferentes desenvolvedores trabalhem na mesma parte do código, reduzindo conflitos no versionamento.
-
 
 # 08 **Faça como eu fiz: criando o projeto Angular e o componente Banner**
 
-
 Caso ainda não tenha feito os passos apresentados nesta aula, chegou a sua vez de colocar a mão no código. Para isso você precisa:
 
 * Criar um projeto Angular usando a CLI e abrir o projeto no editor de código (VS Code);
@@ -520,11 +488,8 @@ Caso ainda não tenha feito os passos apresentados nesta aula, chegou a sua vez 
 * Criar o componente Banner com o Angular CLI, adicionar a data e o nome no template, adicionar os estilos do Banner e utilizar no componente principal.
 
 Caso tenha dúvidas, você pode clicar no botão **Ver opinião do instrutor** para consultar o passo a passo detalhado para realizar a atividade.
-
-
 
 # 09 **O que aprendemos?**
-
 
 Nesta aula, aprendemos:
 
