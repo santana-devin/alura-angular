@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BannerComponent } from './banner/banner.component';
 import { FormNovaTransacaoComponent } from './form-nova-transacao/form-nova-transacao.component';
+import { Transacao } from './modelos/transacao';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,7 @@ import { FormNovaTransacaoComponent } from './form-nova-transacao/form-nova-tran
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'anybank';
+  processarTransacao(transacao: Transacao){
+    console.log(transacao)
+  }
 }

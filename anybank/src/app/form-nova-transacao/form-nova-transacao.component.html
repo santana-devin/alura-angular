@@ -1,12 +1,12 @@
 <main class="form-wrapper">
-    <form (ngSubmit)="aoSubmeter()" class="form">
+    <form (ngSubmit)="aoSubmeter()" class="form" ngNativeValidate>
       <h2 class="titulo">Nova transação</h2>
   
       <div class="campos">
         <label class="campo-grupo">
           Transação
           <div class="select-wrapper">
-            <select name="tipo-transacao" class="campo select-tipo-transacao" required>
+            <select [(ngModel)]="tipoTransacao" name="tipo-transacao" class="campo select-tipo-transacao" required>
               <option value="" selected disabled>Selecione o tipo de transação</option>
               <option value="deposito">Depósito</option>
               <option value="saque">Saque</option>

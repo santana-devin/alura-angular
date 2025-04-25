@@ -419,9 +419,7 @@ Qual abordagem você utilizaria para garantir que o formulário de transações 
 
 Correta, pois esta configuração assegura que apenas valores válidos, com até duas casas decimais e acima de 0,01, sejam aceitos. O uso de "required" garante que o campo não seja deixado em branco, oferecendo uma validação eficaz no lado do cliente.
 
-
 # 06 **Vínculo bidirecional com ngModel**
-
 
 Nós já finalizamos o HTML e o CSS do formulário de nova transação da nossa aplicação.
 
@@ -432,8 +430,6 @@ Por enquanto, não estamos fazendo nada com as informações do formulário. O q
 Se realizarmos, por exemplo, um depósito de R\$ 50,00, queremos que o saldo no componente do banner aumente R\$ 50,00. E se realizarmos um saque, queremos que diminua. Além disso, se observarmos o Figma da nossa aplicação, futuramente teremos um extrato com a lista de transações já realizadas. Portanto, de alguma forma, precisamos capturar essas informações do formulário quando o submetemos e armazená-las em algum lugar.
 
 Primeiro, precisamos entender **como capturar essas informações**. Vamos descobrir como fazer isso no projeto do VS Code.
-
-
 
 Voltando para o VS Code, vamos adicionar na linha 20 do nosso `input` um atributo que esquecemos: o `placeholder`. Após o atributo `step`, vamos inserir o `placeholder` com o valor 00,00. Ao salvar o arquivo, voltar ao navegador e abrir o projeto, o `placeholder` já aparece como texto de sugestão, em conformidade com o que está no Figma.
 
@@ -568,3 +564,230 @@ Então, aprendemos a criar um vínculo bidirecional entre um dado do TypeScript 
 Essa abordagem de formulários, fornecida pelo Angular, é uma das duas principais formas de trabalhar com formulários. A que utilizamos é chamada de **formulários orientados a template**. Existe também uma abordagem mais avançada, conhecida como **formulários reativos**, que será abordada em um curso futuro aqui na Alura. Uma atividade será disponibilizada para explicar melhor a diferença entre essas duas abordagens.
 
 Estamos prontos para continuar o desenvolvimento e aguardamos vocês no próximo vídeo!
+
+# 07 **Para saber mais: Formulários orientados a template vs. Formulário reativos**
+
+A maioria das aplicações que vemos por aí possuem formulários, seja um simples campo de login ou até um cadastro completo com várias etapas, eles sempre estão por lá! E no Angular, temos duas formas de trabalhar com formulários: formulários orientados a templates e formulários reativos. Vem comigo entender cada um deles!
+
+## Diferença entre Formulários orientados a templates e Formulários reativos
+
+### Formulários orientados a templates
+
+Os **formulários orientados a templates**, como o próprio nome sugere, são formulários definidos diretamente no template (HTML) de um componente. Para que isso aconteça, o Angular usa diretivas como `ngModel` que ajudam a fazer a ligação entre o *input* da pessoa usuária e o modelo de dados que está em uso.
+
+Imagine que você quer criar um formulário para cadastrar o nome e o e-mail das pessoas usuárias. Para isso, você criou um componente que vai adotar a estratégia de formulários orientados a template. Sendo assim, você teria os seguintes códigos nos arquivos HTML e TypeScript, respectivamente:
+
+```html
+<form (ngSubmit)="enviarFormulario()">
+  <label for="nome">Nome:</label>
+  <input type="text" id="nome" name="nome" [(ngModel)]="usuario.nome" required>
+ 
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" [(ngModel)]="usuario.email" required>
+ 
+  <button type="submit">Enviar</button>
+</form>
+Copiar código
+```
+
+```ts
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+ 
+@Component({
+  selector: 'app-formulario-orientado-a-templates',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './formulario-orientado-a-templates.component.html',
+  styleUrl: './formulario-orientado-a-templates.component.css'
+})
+export class FormularioOrientadoATemplatesComponent {
+  usuario = { nome: '', email: '' };
+ 
+  enviarFormulario() {
+    console.log('Dados enviados:', this.usuario);
+  }
+}
+Copiar código
+```
+
+No exemplo acima, o formulário é definido no HTML e usa a diretiva `ngModel` para ligar os campos criados no HTML ao objeto `usuario` no TypeScript. Isso torna a implementação mais simples, porém menos escalável para projetos maiores.
+
+### Formulários Reativos
+
+Já os **formulários reativos** são gerenciados diretamente via código TypeScript. Com essa abordagem, o Angular oferece algumas classes como `FormGroup`, `FormControl` e `FormArray` para um controle mais estruturado e dinâmico dos dados.
+
+Vamos usar o mesmo exemplo do formulário para cadastrar o nome e o e-mail de uma pessoa usuária na aplicação, mas agora usando a abordagem de formulários reativos:
+
+```html
+<form [formGroup]="meuFormulario" (ngSubmit)="enviarFormulario()">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" formControlName="nome">
+ 
+    <label for="email">Email:</label>
+    <input type="email" id="email" formControlName="email">
+ 
+    <button type="submit" [disabled]="meuFormulario.invalid">Enviar</button>
+</form>
+Copiar código
+```
+
+```ts
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+ 
+@Component({
+  selector: 'app-formulario-reativo',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './formulario-reativo.component.html',
+  styleUrl: './formulario-reativo.component.css'
+})
+export class FormularioReativoComponent {
+  meuFormulario = new FormGroup({
+    nome: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
+ 
+  enviarFormulario() {
+    console.log('Dados enviados:', this.meuFormulario.value);
+  }
+}
+Copiar código
+```
+
+No exemplo acima, o formulário é definido no TypeScript usando `FormGroup` e `FormControl` para criar e gerenciar os campos. Isso permite maior controle sobre os dados, validações mais avançadas e uma estrutura mais flexível, sendo uma opção ideal para aplicações complexas e escaláveis.
+
+## Onde usar?
+
+Se você está desenvolvendo um formulário básico, como uma inscrição para newsletter ou um simples login, os formulários orientados a templates vão te atender muito bem. Agora, se sua aplicação tem formulários dinâmicos, validação complexa ou precisa de integrações maiores, os formulários reativos são uma boa opção.
+
+No final das contas, não existe uma solução certa ou errada, mas sim a mais adequada para cada caso. Escolha com sabedoria e feliz codificação!
+
+Caso queira mais informações relacionadas aos formulários do Angular, você pode consultar a [documentação oficial sobre Formulários do Angular](https://angular.dev/guide/forms), por lá, você vai descobrir mais sobre como criar formulários no Angular e mergulhar ainda mais fundo nessas duas abordagens que discutimos neste texto.
+
+# 08 **ngModel no select e validação nativa do HTML**
+
+Nós conseguimos lidar com o campo de formulário e obtivemos uma informação dele utilizando a sintaxe do `ngModel` e a sintaxe de vínculo bidirecional de dados, ou *two-way databinding*. Com isso, conseguimos vincular totalmente uma informação do TypeScript com o template do HTML.
+
+Agora, qualquer valor que colocarmos no campo de valor da transação será impresso no console do navegador. Por enquanto, isso é tudo o que estamos fazendo com essa informação.
+
+## Implementando o campo de seleção no formulário
+
+No entanto, ainda não estamos imprimindo o tipo da transação. Inclusive, nem selecionamos essa opção ainda, e precisamos lidar com o campo `Select` também. Vamos conferir como fazer isso?
+
+No VS Code, já estamos com o arquivo HTML do formulário aberto. Vamos subir um pouco até o `Select`. Não será muito diferente. Dentro do `Select`, utilizaremos a mesma sintaxe de "banana na caixa". Primeiro, colocamos os colchetes, os parênteses dentro, e escrevemos `ngModel`. Em seguida, escrevemos igual, abrimos as aspas, e dentro vamos vincular esse `Select` com uma propriedade da nossa classe. Podemos chamá-la de `tipoTransacao`.
+
+```vbnet
+<select [(ngModel)]="tipoTransacao" name="tipo-transacao" class="campo select-tipo-transacao" required>
+    <option value="" selected disabled>Selecione o tipo de transação</option>
+    <option value="deposito">Depósito</option>
+    <option value="saque">Saque</option>
+</select>
+Copiar código
+```
+
+Vamos copiar o nome dessa propriedade `tipoTransacao` e criá-la agora no TypeScript.
+
+No arquivo TypeScript, logo antes de `valorTransacao`, criaremos `tipoTransacao`. Para testar, inicializaremos com o mesmo valor que tem, por exemplo, na opção `saque`. Copiamos a string "saque" com "s" minúsculo e colocamos em `tipoTransacao`.
+
+```javascript
+export class FormNovaTransacaoComponent {
+  tipoTransacao = "saque";
+  valorTransacao = "40";
+
+  aoSubmeter() {
+    console.log(this.valorTransacao);
+  }
+}
+Copiar código
+```
+
+Salvamos o arquivo, voltamos ao navegador, e, por padrão, a opção "Saque" já está selecionada. Assim, conferimos como a propriedade da classe já está afetando o nosso template HTML.
+
+No entanto, não queremos deixar "saque" selecionado por padrão, nem o valor de 40 reais. Voltamos ao TypeScript, removemos "saque" e o valor de 40. Tanto `tipoTransacao` quanto `valorTransacao` serão strings vazias.
+
+Salvamos o arquivo. Ao voltar para o HTML, o fato de deixarmos `tipoTransacao` como uma string vazia faz com que, automaticamente, a opção com o valor de string vazia, que é a opção que queremos que apareça naquele texto, seja selecionada por padrão.
+
+Voltando ao navegador, é exatamente isso que está acontecendo agora. Aquela opção que é desabilitada está selecionada por padrão. Perfeito.
+
+Voltamos ao TypeScript e agora queremos colocar um `console.log` no tipo da transação também, apenas para ter certeza de que está funcionando. Logo antes do `console.log` que já estava no valor da transação, adicionamos um `console.log` no tipo da transação também.
+
+```javascript
+export class FormNovaTransacaoComponent {
+  tipoTransacao = "";
+  valorTransacao = "";
+
+  aoSubmeter() {
+    console.log(this.tipoTransacao);
+    console.log(this.valorTransacao);
+  }
+}
+Copiar código
+```
+
+Salvamos o arquivo, voltamos ao navegador.
+
+Agora, ao selecionar, por exemplo, um depósito, vamos colocar mil reais e confirmar a transação, a string "depósito", tudo em minúsculo, é impressa no console, assim como o valor mil. Se testarmos agora com o saque, colocando 10 mil e confirmando a transação, continua funcionando perfeitamente.
+
+## Recuperando a validação nativa do HTML
+
+Temos mais um ponto a abordar em relação ao formulário. Vamos atualizar a página e observar o que acontece ao tentar submeter o formulário clicando no botão de confirmar a transação sem preencher nada. Ao clicar, o formulário é submetido, e no console aparecem duas impressões, que são, na verdade, duas *strings* vazias. Isso não é ideal, pois anteriormente tínhamos uma validação que tornava os campos obrigatórios.
+
+Vamos analisar outro caso: se selecionarmos "depósito" e inserirmos o valor 50,001, ao confirmar a transação, o sistema permite que esse número passe, mesmo que não faça sentido. Lembramos que implementamos uma validação no HTML para permitir apenas até duas casas decimais para os centavos. Por que essa validação não está mais funcionando? O que pode ter ocorrido? Será um bug? Vamos explicar o motivo.
+
+Ao importar o `FormsModule` no componente, as validações nativas dos formulários HTML são automaticamente removidas. Isso ocorre porque o Angular oferece validações mais avançadas que as nativas do HTML. Para evitar conflitos entre as duas, o Angular desativa as validações nativas, permitindo o uso das suas próprias.
+
+No entanto, neste curso, não utilizaremos as validações avançadas do Angular, pois não nos aprofundaremos tanto. Em um curso futuro, haverá mais tempo dedicado a isso.
+
+Para este formulário simples, queremos utilizar as validações nativas do HTML, e isso é possível. Vamos voltar ao HTML do componente e usar uma diretiva que o Angular fornece para essa situação: `ngNativeValidate`.
+
+```javascript
+<main class="form-wrapper">
+  <form (ngSubmit)="aoSubmeter()" class="form" ngNativeValidate>
+    <h2 class="titulo">Nova transação</h2>
+Copiar código
+```
+
+Após salvar o arquivo e voltar ao navegador, o formulário não apresenta mudanças visuais. Ao tentar confirmar novamente, a validação nativa do HTML é recuperada. O sistema informa que o valor não é válido e sugere valores válidos próximos, como 50 e 50,01. Isso é exatamente o que desejávamos.
+
+Para confirmar, atualizamos a página e tentamos submeter o formulário sem preencher o tipo de transação. O sistema solicita a seleção de um item da lista. Ao selecionar "depósito" e tentar confirmar novamente, ele também exige o preenchimento do campo de valor. As validações de campos obrigatórios voltaram a funcionar, o que nos deixa satisfeitos.
+
+Agora, aprendemos a usar o `ngModule` no campo de *select* e a diretiva `ngNativeValidate` para recuperar a validação nativa do HTML.
+
+## Próximo passo
+
+Com isso, já temos os recursos e informações necessárias para começar a implementar a comunicação entre os componentes. Faremos isso na próxima aula!
+
+
+
+# 09 **Mão na massa: resetando o formulário na submissão**
+
+
+Nesta aula, aprendemos como criar um formulário para registrar novas transações. Contudo, os dados que inserimos no formulário ainda permanecem nos campos depois da submissão.
+
+É comum que, para melhorar a experiência da pessoa usuária, os campos do formulário sejam retornados ao seu estado inicial, caso a pessoa queira interagir com o formulário novamente. No nosso caso, se quisermos fazer uma nova transação, não precisamos apagar os campos toda vez.
+
+Por isso conto com você para me ajudar a implementar a funcionalidade para limpar os campos do formulário assim que os dados forem submetidos.
+
+Para isso você pode:
+
+* Abrir o arquivo `form-nova-transacao.component.ts`;
+* Dentro da função `aoSubmeter()`, modifique o valor das propriedades `tipoTransacao` e `valorTransacao` do componente para que o formulário retorne ao estado inicial.
+
+> Lembre-se que, como estamos utilizando um vínculo bidirecional com `ngModel`, o valor das propriedades no arquivo TypeScript também determinam a visualização no template.
+
+Abaixo está o passo a passo detalhado de como você pode realizar a atividade!
+
+
+# 10 **O que aprendemos?**
+
+
+Nesta aula, aprendemos a:
+
+* Estruturar formulários HTML com tags apropriadas e vincular campos à `label`.
+* Configurar uma opção do `select` como padrão e desabilitada.
+* Utilizar `FormsModule` no Angular para interagir com formulários.
+* Implementar o vínculo bidirecional de dados com `ngModel`.
+* Capturar dados de formulário em sua submissão com o `ngSubmit`.
+* Explorar `ngNativeValidate` para reativar validações nativas do HTML.
