@@ -3,5 +3,6 @@
     <app-banner [saldo]="saldo()"/>
     <app-form-nova-transacao (transacaoCriada)="processarTransacao($event)" />
   </div>
+  <app-extrato [transacoes]="transacoes()" class="extrato" ></app-extrato>
 </div>
 
