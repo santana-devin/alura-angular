@@ -396,8 +396,7 @@ Que tal você colocar em prática os conhecimentos que estamos passando e criar 
 
 Você pode reaproveitar algumas coisas que já fizemos. É a sua missão deixar o *footer* pronto para nossa aplicação ficar bonitona!
 
-
-# 06**Componente container**
+# 06 **Componente container**
 
 Você está trabalhando como dev e a equipe decidiu criar um container flexível que possa envolver e aplicar um estilo específico em todos os componentes da aplicação, visando garantir consistência visual e facilitar a manutenção do código.
 
@@ -512,3 +511,384 @@ O conteúdo do header foi envolvido pelo componente app-container que está util
 ```
 
 Embora o componente `header` tenha sido envolvido pelo componente `app-container`, a diretiva `ng-content` foi colocada dentro da tag de `app-container`. Essa diretiva deve ser usada dentro do template de `app-container`, apenas. Aqui no `header`, o que precisa ser passado é o conteúdo que vai ser injetado que `app-container` espera receber.
+
+# 07 **Para saber mais: uso do ng-content para mais de um conteúdo**
+
+## O `<ng-content>`
+
+O ng-content é uma diretiva do Angular que permite a criação de componentes flexíveis e reutilizáveis, capazes de receber e exibir conteúdo dinâmico. É uma ferramenta poderosa para criar componentes genéricos que podem se adaptar a diferentes necessidades de conteúdo.
+
+## Uso do `<ng-content>` para múltiplas injeções de conteúdo
+
+Ao criar componentes reutilizáveis, muitas vezes é necessário injetar diferentes tipos de conteúdo em posições específicas. Por exemplo, em um componente de layout, você pode ter a necessidade de inserir um cabeçalho, um corpo e um rodapé. O desafio é como permitir que esses conteúdos sejam inseridos de forma flexível, sem a necessidade de criar múltiplas propriedades de entrada.
+
+## Controlando o conteúdo injetado com o `select`
+
+O seletor `select` é usado em conjunto com o ng-content para especificar quais elementos serão inseridos em cada ponto de inserção. Ele permite filtrar os elementos que serão injetados em um determinado ponto de inserção, fornecendo maior controle sobre a estrutura e o estilo do componente.
+
+Exemplo:
+
+Suponha que você está criando um componente chamado `<app-home>` que possui dois pontos de inserção de conteúdo: título e conteúdo. Você pode utilizar o `select` para especificar quais elementos serão inseridos em cada ponto de inserção. Veja o exemplo abaixo:
+
+```html
+<app-home>
+    <div class=”titulo”>
+      <h1>Título </h1>
+    </div>
+    <div class=”conteudo”>
+      <p>Conteúdo…</p>
+    </div>
+</app-home>
+Copiar código
+```
+
+Acima, criamos o template de `<app-home>` com o título e conteúdo que devem ser padronizados.
+
+Em seguida, passamos no template do container o `ng-content` com o `select` para injetar o conteúdo nos pontos de inserção conforme desejarmos:
+
+```html
+<ng-content select=".titulo"></ng-content>
+<div class="content-body">
+  <ng-content select=".conteudo"></ng-content>
+</div>
+Copiar código
+```
+
+Nesse exemplo, o conteúdo dentro do elemento com a classe `titulo` será injetado no primeiro ponto de inserção `<ng-content select=".titulo"></ng-content>`, enquanto o conteúdo dentro do elemento com a classe `conteudo` será injetado no segundo ponto de inserção `<ng-content select=".conteudo"></ng-content>`. Dessa forma, você tem controle total sobre quais elementos são injetados em cada ponto específico do componente.
+
+## Fechamento uso ng-content
+
+O ng-content é uma ferramenta poderosa no desenvolvimento de componentes reutilizáveis e flexíveis. Ele permite que você crie componentes genéricos que podem se adaptar a diferentes necessidades de conteúdo, proporcionando maior controle sobre a estrutura e o estilo. Ao usar o `ng-content` em conjunto com o `select`, você pode criar componentes altamente customizáveis, capazes de receber e exibir múltiplos tipos de conteúdo de forma dinâmica.
+
+# 08 **Desafio: crie o footer da aplicação**
+
+Agora que você aprendeu a criar componentes reutilizáveis e um container que recebe conteúdo dinamicamente através da diretiva `ng-content`, está na hora de colocar esses conhecimentos em prática!
+
+O seu desafio será criar o rodapé da aplicação Jornada Milhas, observando a estilização e os cuidados para que esse componente fique otimizado e fiel ao design do Figma.
+
+# 09 **Criando um card reaproveitável**
+
+**Nayanne:** Vamos continuar codando, porque temos prazo para entregar.
+
+Conferindo no Figma, o que falta na nossa homepage é o formulário de busca e os cards, tanto os de promoções quanto os de depoimentos.
+
+Como o formulário de busca é um pouco mais complexo, acho uma boa ideia começarmos pelo card. Até porque já temos o componente na pasta "shared".
+
+Analisando o Figma podemos perceber que existem cards com tamanhos e colorações diferentes, alguns cards possuem background cinza e outros têm background lilás. Precisamos criar um card reutilizável que possa ter essas diferentes variações.
+
+No VS Code, vamos abrir os arquivos `card.component.scss` e `card.component.html`.
+
+No HTML criaremos uma div classe card. Para conseguirmos passar diferentes variações, utilizaremos a diretiva `ngClass`, que será responsável por fazer a estilização condicional. Associaremos essa diretiva a uma variável que chamaremos de `variant`.
+
+O conteúdo passado para dentro desse card será dinâmico, então usaremos a diretiva `ng-content`.
+
+```xml
+<div class="card" [ngClass]="variant">
+  <ng-content></ng-content>
+</div>
+Copiar código
+```
+
+Agora, vamos criar a variável `variant` no `card.component.ts`. Ela será uma propriedade de entrada, então vamos adicionar o *decorator* `@Input()`.
+
+Por enquanto, temos duas variações dos cards, podemos passar essas duas possibilidades como valor para `variant`. Passaremos entre aspas simples primary, adicionar uma barra vertical (*pipe*) e passar a variação `secondary`.
+
+O caractere da barra vertical (*pipe*) faz parte de um recurso do TypeScript chamado Union Types, com ela vamos indicar que a variante terá um valor ou outro valor. Além disso, podemos passar um valor inicial padrão, que será o `primary`.
+
+```kotlin
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.scss']
+})
+export class CardComponent {
+  @Input() variant: 'primary' | 'secondary' = 'primary'
+}
+Copiar código
+```
+
+Em seguida, acessaremos o CSS para cordar os estilos. No `card.component.scss` passaremos um padding de 24px e estilizaremos as diferentes classes do `ngClass`. Para isso, usaremos `&` seguido de ponto e passaremos o nome da classe, `&.primary`.
+
+Isso significa que os estilos que colocarmos dentro desse bloco serão aplicados aos elementos que possuem a classe `card` e também a classe `primary`.
+
+```css
+.card {
+  padding: 24px;
+  &.primary {
+  
+  }
+}
+Copiar código
+```
+
+Vamos verificar quais são as especificações dos estilos de card no Figma. Em seguida, faremos o mesmo para a classe `secondary`, que terá o estilo do formulário de busca com fundo cinza. Nosso código ficará assim:
+
+```css
+.card {
+  padding: 24px;
+  &.primary {
+    background: #FEF7FF;
+    border: 1px solid #CAC4D0;
+    border-radius: 12px;
+  }
+  &.secondary {
+    background: #F5F5F5;
+    border-radius: 16px;
+  }
+}
+Copiar código
+```
+
+**Vinícios:** Recapitulando, nós reutilizamos o `ng-content` para renderizar tudo que estiver dentro do card. E combinamos várias coisas diferentes.
+
+Nós tipamos o input `variant`, dizendo que o card deve ser primário ou secundário.
+
+**Nayanne:** Isso mesmo! E mais adiante, se tivermos outros cards podemos adicionar mais variações. Isso ajuda na reutilização desse componente.
+
+Neste vídeo, nós criamos um card reutilizável e no próximo vídeo continuaremos a criação de componentes!
+
+# 10 **Card de busca**
+
+**Nayanne:** Neste vídeo, criaremos o card de busca, que tem uma imagem, o local, preço da passagem e um botão "Ver detalhes".
+
+Para isso, no VS Code, criaremos um novo componente dentro da pasta "shared". Vamos abrir o terminal e parar a aplicação com "Ctrl + C". Em seguida executaremos o comando:
+
+```bash
+ng gc shared/card-busca
+Copiar código
+```
+
+Após criar o componente, podemos executar a aplicação novamente com `ng serve`.
+
+Agora, vamos acessar o [Angular Material](https://material.angular.io/components/card/overview) e analisar a seção do componente card.
+
+Nos [exemplos do Angular Material](https://material.angular.io/components/card/examples), no "Card with multiple sections", podemos ver um componente bem parecido com o da nossa aplicação. O card do exemplo tem uma imagem, descrição e alguns botões de ação.
+
+Na aba "API" do Angular Material, vamos copiar o import do módulo.
+
+```javascript
+import {MatCardModule} from '@angular/material/card';
+Copiar código
+```
+
+Vamos inserir essa linha na lista de *imports* do `app.module.ts` do nosso projeto. Além disso, vamos adicionar `MatCardModule` no array de `imports`.
+
+```markdown
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule
+  ],
+Copiar código
+```
+
+Agora já podemos utilizar.
+
+De volta à aba de exemplo do Angular Material, vamos copiar o código HTML do card exemplo para usarmos de base para a construção do nosso card.
+
+```javascript
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Shiba Inu</mat-card-title>
+    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <p>
+      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </mat-card-actions>
+</mat-card>
+Copiar código
+```
+
+Vamos colar esse código no `card-busca.component.html` e fazer algumas modificações.
+
+No card do exemplo, tem um cabeçalho com o nome. Não precisaremos desse trecho, podemos apagar o bloco da tag `mat-card-heard`.
+
+Também vamos mudar o caminho da imagem e o alt da imagem. Depois, vamos apagar o parágrafo do exemplo e adicionar uma lista `<ul>` com duas `<li>`: Veneza e 500.
+
+Na tag `mat-card-actions` , deixaremos apenas um botão de ação chamado "VER DETALHES". Mudaremos também o tipo do botão para `mat-flat-button` e passaremos a cor `primary` para ficar com a cor roxa.
+
+```javascript
+<mat-card class="card-busca">
+  <img mat-card-image
+    src="assets/imagens/Veneza.png" alt="Imagem de Veneza">
+  <mat-card-content>
+    <ul>
+      <li>Veneza</li>
+      <li>R$ 500</li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="primary">VER DETALHES</button>
+  </mat-card-actions>
+</mat-card>
+Copiar código
+```
+
+Agora, precisamos estilizar no SCSS. O card-busca.component.scss terá o seguinte código:
+
+```css
+.card-busca {
+  max-width: 320px;
+  background-color: #FEF7FF;
+  border-radius: 12px;
+  button {
+    width: 100%;
+    margin: 0 16px 48px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      margin: 12px;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 32px;
+      color: #1D1B20;
+      text-align: center;
+    }
+  }
+}
+Copiar código
+```
+
+Para testar, vamos acessar o `home.component.html` e inserir o seletor do `app-card-busca`.
+
+```xml
+  <app-banner
+    src="assets/imagens/banner-homepage.png"
+    alt="Banner da aplicação Jornada">
+  </app-banner> 
+    <app-container>
+    <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+        <app-card-busca></app-card-busca>
+    </app-container> 
+Copiar código
+```
+
+Vamos verificar como está na aplicação.
+
+Os cards estão aparecendo na tela, mas ainda não estão do jeito que queremos.
+
+**Vinícios:** Nós precisamos organizar os cards para que eles fiquem lado a lado. Precisaremos de algum contêiner, algum `display: flex` para deixá-los alinhados como está no Figma.
+
+**Nayanne:** Vamos resolver isso no próximo vídeo!
+
+
+# 11 **Alinhando os cards**
+
+
+**Nayanne:** No vídeo anterior, criamos o card de busca usando como base o um código exemplo do Angular Material.
+
+Mas os cards estão listados um abaixo do outro, precisamos resolver isso.
+
+No arquivo `home.component.html`, adicionaremos uma div com a classe `card-wrapper` para envolver esses cards de busca.
+
+```xml
+  <app-banner
+    src="assets/imagens/banner-homepage.png"
+    alt="Banner da aplicação Jornada">
+  </app-banner> 
+    <app-container>
+    <div class="card-wrapper">
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+    </div>
+    </app-container> 
+Copiar código
+```
+
+E no CSS `home.component.scss`, vamos colar os estilos.
+
+```css
+.homepage {
+  .card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 16px;
+    margin-bottom: 40px;
+  }
+}
+Copiar código
+```
+
+Podemos voltar para a aplicação no navegador. Agora, sim! Os cards estão um ao lado do outro em fileiras de três.
+
+Para ficar mais parecido com o Figma, vamos adicionar o título "Promoções". Vamos adicionar também o título dos cards de depoimentos.
+
+```xml
+  <app-banner
+    src="assets/imagens/banner-homepage.png"
+    alt="Banner da aplicação Jornada">
+  </app-banner> 
+    <app-container>
+    <h2>Promoções</h2>
+    <div class="card-wrapper">
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+      <app-card-busca></app-card-busca>
+    </div>
+    <h2>Depoimentos</h2>
+    </app-container> 
+Copiar código
+```
+
+## Desafio: crie o card de depoimento
+
+**Vinícios:** Então, o próximo passo é desenvolver o card de depoimentos.
+
+**Nayanne:** Exatamente. Você, que está assistindo a esta aula, pode nos ajudar nessa. Vai ficar como desafio para você colocar em prática tudo o que você está aprendendo e **codar o componente do card de depoimento**.
+
+**Vinícios:** Essa parte de olhar o Figma e transformar isso em um componente do Angular é o que fazemos no dia a dia enquanto pessoas desenvolvedoras de front-end. Então, ficaremos muito contentes se você desenvolver esse desafio aí na sua máquina!
+
+
+# 12 **Desafio: crie o card de depoimento**
+
+
+Você aprendeu a criar cards reaproveitáveis e entendeu como aplicar estilos e personalização, então já é hora de colocar seus conhecimentos em prática! Seu próximo desafio será criar os cards de depoimento para a aplicação Jornada Milhas, levando em consideração a estilização e os requisitos de design fornecidos no Figma.
+
+Mãos à obra e aproveite esse desafio para aprimorar suas habilidades e melhorar ainda mais o layout da aplicação Jornada Milhas!
+
+
+# 13 **O que aprendemos?**
+
+## Nessa aula, você aprendeu como criar:
+
+* Os componentes de `banner` e `título` com conteúdo flexível;
+* Um container flexível com a diretiva `ng-content`;
+* Cards reaproveitáveis com variação de estilos;
+* Card de busca utilizando o `mat-card` do Angular Material.
